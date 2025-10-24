@@ -1,0 +1,170 @@
+{
+  "exc_manual": {
+    "codigo": "exc_manual",
+    "descripcion": "Excavación manual en tierra",
+    "unidad": "m³",
+    "precio_unitario": 45000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "exc_mecanica": {
+    "codigo": "exc_mecanica",
+    "descripcion": "Excavación mecánica",
+    "unidad": "m³",
+    "precio_unitario": 25000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "relleno_comp": {
+    "codigo": "relleno_comp",
+    "descripcion": "Relleno compactado",
+    "unidad": "m³",
+    "precio_unitario": 35000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "conc_3000_psi": {
+    "codigo": "conc_3000_psi",
+    "descripcion": "Concreto 3000 PSI",
+    "unidad": "m³",
+    "precio_unitario": 450000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "conc_4000_psi": {
+    "codigo": "conc_4000_psi",
+    "descripcion": "Concreto 4000 PSI",
+    "unidad": "m³",
+    "precio_unitario": 520000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "acero_ref": {
+    "codigo": "acero_ref",
+    "descripcion": "Acero de refuerzo",
+    "unidad": "kg",
+    "precio_unitario": 5500,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "tuberia_pvc_200": {
+    "codigo": "tuberia_pvc_200",
+    "descripcion": "Tubería PVC 200mm",
+    "unidad": "m",
+    "precio_unitario": 65000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "tuberia_pvc_300": {
+    "codigo": "tuberia_pvc_300",
+    "descripcion": "Tubería PVC 300mm",
+    "unidad": "m",
+    "precio_unitario": 95000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "valvula_compuerta_200": {
+    "codigo": "valvula_compuerta_200",
+    "descripcion": "Válvula compuerta 200mm",
+    "unidad": "und",
+    "precio_unitario": 850000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "bomba_centrifuga_5hp": {
+    "codigo": "bomba_centrifuga_5hp",
+    "descripcion": "Bomba centrífuga 5 HP",
+    "unidad": "und",
+    "precio_unitario": 3500000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "dosificador_quimico": {
+    "codigo": "dosificador_quimico",
+    "descripcion": "Dosificador químico",
+    "unidad": "und",
+    "precio_unitario": 8500000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "arena_filtrante": {
+    "codigo": "arena_filtrante",
+    "descripcion": "Arena filtrante lavada",
+    "unidad": "m³",
+    "precio_unitario": 180000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "antracita": {
+    "codigo": "antracita",
+    "descripcion": "Antracita filtrante",
+    "unidad": "m³",
+    "precio_unitario": 450000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "grava": {
+    "codigo": "grava",
+    "descripcion": "Grava soporte",
+    "unidad": "m³",
+    "precio_unitario": 75000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "sulfato_aluminio": {
+    "codigo": "sulfato_aluminio",
+    "descripcion": "Sulfato de aluminio",
+    "unidad": "kg",
+    "precio_unitario": 1200,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "cloro_gas": {
+    "codigo": "cloro_gas",
+    "descripcion": "Cloro gas",
+    "unidad": "kg",
+    "precio_unitario": 4500,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "hipoclorito_sodio": {
+    "codigo": "hipoclorito_sodio",
+    "descripcion": "Hipoclorito de sodio 10%",
+    "unidad": "L",
+    "precio_unitario": 2500,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "polimero": {
+    "codigo": "polimero",
+    "descripcion": "Polímero floculante",
+    "unidad": "kg",
+    "precio_unitario": 15000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "operador_ptap": {
+    "codigo": "operador_ptap",
+    "descripcion": "Operador PTAP",
+    "unidad": "mes",
+    "precio_unitario": 1800000,
+    "fuente": "SMLV Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "supervisor": {
+    "codigo": "supervisor",
+    "descripcion": "Supervisor técnico",
+    "unidad": "mes",
+    "precio_unitario": 3500000,
+    "fuente": "Promedio mercado Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  },
+  "energia_electrica": {
+    "codigo": "energia_electrica",
+    "descripcion": "Energía eléctrica",
+    "unidad": "kWh",
+    "precio_unitario": 650,
+    "fuente": "Promedio Colombia 2024",
+    "fecha_actualizacion": "2024-01"
+  }
+}

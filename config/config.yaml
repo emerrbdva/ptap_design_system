@@ -1,0 +1,447 @@
+# ============================================================================
+# CONFIGURACIÓN PRINCIPAL DEL SISTEMA PTAP
+# Sistema Integral de Diseño de Plantas de Potabilización de Agua
+# ============================================================================
+
+# ============================================================================
+# INFORMACIÓN DEL PROYECTO
+# ============================================================================
+project:
+  name: "Sistema Integral de Diseño PTAP"
+  version: "1.0.0"
+  description: "Sistema de diseño de plantas de potabilización con IA local y validación normativa"
+  author: "Equipo PTAP"
+  license: "MIT"
+  created: "2025-10-11"
+
+# ============================================================================
+# MODELOS DE IA LOCAL (Ollama)
+# ============================================================================
+ai_models:
+  # Servidor Ollama
+  ollama:
+    host: "http://localhost:11434"
+    timeout: 300  # segundos
+    keep_alive: "5m"
+  
+  # DeepSeek-R1: Razonamiento técnico y planificación compleja
+  reasoning:
+    model: "deepseek-r1:8b"  # Opciones: 8b, 14b, 32b, 70b
+    temperature: 0.1
+    top_p: 0.9
+    max_tokens: 4096
+    system_prompt: |
+      Eres un ingeniero sanitario experto en diseño de plantas de tratamiento de agua potable.
+      Debes razonar paso a paso, considerar la normativa colombiana (RAS 2017, Res. 2115, Dec. 1575)
+      y proporcionar cadenas de pensamiento verificables. Nunca inventes números: solicita cálculos
+      a las funciones matemáticas disponibles.
+  
+  # Qwen2.5-Math: Resolución matemática y cálculos
+  math:
+    model: "qwen2.5-math:7b"  # Opciones: 1.5b, 7b, 72b
+    temperature: 0.0  # Determinístico para cálculos
+    top_p: 0.95
+    max_tokens: 2048
+    system_prompt: |
+      Eres un asistente matemático especializado en ingeniería hidráulica y sanitaria.
+      Estructura problemas matemáticos paso a paso y proporciona las expresiones simbólicas
+      necesarias para resolver con SymPy. Nunca calcules directamente: devuelve las fórmulas
+      para verificación automática.
+  
+  # Mistral-7B-Instruct: Redacción técnica en español
+  writing:
+    model: "mistral:7b-instruct-v0.3"
+    temperature: 0.3
+    top_p: 0.9
+    max_tokens: 8192
+    language: "es"
+    system_prompt: |
+      Eres un redactor técnico especializado en documentos de ingeniería sanitaria en español.
+      Redacta memorias de cálculo, marcos normativos y documentos técnicos profesionales
+      siguiendo estándares colombianos. Incluye referencias a artículos y tablas del RAS 2017,
+      Resolución 2115 de 2007 y Decreto 1575 de 2007. Usa lenguaje formal y técnico.
+
+# ============================================================================
+# POLÍTICA DE EXACTITUD Y VERIFICACIÓN
+# ============================================================================
+verification:
+  # CRÍTICO: Nunca aceptar números directos de LLMs
+  enforce_symbolic_calculation: true
+  require_unit_verification: true
+  require_formula_traceability: true
+  
+  # Librerías de verificación
+  symbolic_engine: "sympy"
+  numeric_engine: "scipy"
+  unit_engine: "pint"
+  
+  # Tolerancias numéricas
+  decimal_precision: 6
+  relative_tolerance: 1.0e-6
+  absolute_tolerance: 1.0e-9
+
+# ============================================================================
+# NORMATIVA COLOMBIANA
+# ============================================================================
+compliance:
+  # Resolución 0330 de 2017 (RAS)
+  ras_2017:
+    enabled: true
+    url: "https://minvivienda.gov.co/normativa/resolucion-0330-2017-0"
+    canonical_source: "https://normas.cra.gov.co/gestor/docs/resolucion_minviviendact_0330_2017.htm"
+    version: "2017"
+    last_updated: "2017-06-08"
+    alert_on_changes: true
+    
+  # Resolución 2115 de 2007
+  res_2115:
+    enabled: true
+    url: "https://minvivienda.gov.co/sites/default/files/normativa/2115%20-%202007.pdf"
+    version: "2007"
+    last_updated: "2007-06-22"
+    
+  # Decreto 1575 de 2007
+  dec_1575:
+    enabled: true
+    url: "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=30007"
+    version: "2007"
+    last_updated: "2007-05-09"
+    
+  # Resolución 799 de 2021 (Ajustes)
+  res_799:
+    enabled: true
+    version: "2021"
+    last_updated: "2021-06-30"
+
+# ============================================================================
+# CONECTORES A PORTALES GUBERNAMENTALES
+# ============================================================================
+data_sources:
+  # Datos Abiertos Colombia
+  datos_abiertos:
+    enabled: true
+    base_url: "https://www.datos.gov.co"
+    api_endpoint: "https://www.datos.gov.co/resource"
+    rate_limit: 1000  # requests/hour
+    requests_per_second: 2
+    timeout: 30  # segundos
+    retry_attempts: 3
+    retry_backoff: 2  # exponencial
+    cache_enabled: true
+    cache_ttl: 86400  # 24 horas en segundos
+    snapshot_enabled: true
+    snapshot_dir: "data/snapshots/datos_abiertos"
+    
+  # IDEAM - DHIME (Datos Hidrometeorológicos)
+  ideam:
+    enabled: true
+    base_url: "http://dhime.ideam.gov.co"
+    api_endpoint: "http://dhime.ideam.gov.co/atencionciudadano"
+    timeout: 60
+    retry_attempts: 3
+    cache_enabled: true
+    cache_ttl: 604800  # 7 días
+    snapshot_dir: "data/snapshots/ideam"
+    
+  # SIAC - Sistema de Información Ambiental de Colombia
+  siac:
+    enabled: true
+    base_url: "http://www.siac.gov.co"
+    timeout: 45
+    retry_attempts: 3
+    cache_enabled: true
+    cache_ttl: 86400
+    snapshot_dir: "data/snapshots/siac"
+    
+  # MinVivienda - CRA
+  minvivienda:
+    enabled: true
+    ras_url: "https://minvivienda.gov.co/normativa/resolucion-0330-2017-0"
+    cra_url: "https://normas.cra.gov.co"
+    check_updates: true
+    check_interval: 604800  # 7 días
+
+# ============================================================================
+# PROCESOS UNITARIOS DE TRATAMIENTO
+# ============================================================================
+treatment_processes:
+  # Aireación
+  aireacion:
+    enabled: true
+    ras_references: ["A.7.4"]
+    parameters:
+      tiempo_contacto_min: 15  # minutos
+      tiempo_contacto_max: 30
+      carga_superficial_min: 20  # m³/m²·h
+      carga_superficial_max: 60
+      
+  # Mezcla Rápida
+  mezcla_rapida:
+    enabled: true
+    ras_references: ["A.7.5"]
+    parameters:
+      gradiente_velocidad_min: 600  # s⁻¹
+      gradiente_velocidad_max: 1500
+      tiempo_retencion_min: 10  # segundos
+      tiempo_retencion_max: 60
+      
+  # Coagulación-Floculación
+  floculacion:
+    enabled: true
+    ras_references: ["A.7.6"]
+    parameters:
+      gradiente_velocidad_min: 20  # s⁻¹
+      gradiente_velocidad_max: 70
+      tiempo_retencion_min: 10  # minutos
+      tiempo_retencion_max: 40
+      
+  # Sedimentación
+  sedimentacion:
+    enabled: true
+    ras_references: ["A.7.7"]
+    parameters:
+      carga_superficial_min: 10  # m³/m²·día
+      carga_superficial_max: 50
+      velocidad_horizontal_max: 0.55  # cm/s
+      tiempo_retencion_min: 1.5  # horas
+      tiempo_retencion_max: 4.0
+      
+  # Filtración
+  filtracion:
+    enabled: true
+    ras_references: ["A.7.8"]
+    parameters:
+      tasa_filtracion_min: 120  # m³/m²·día
+      tasa_filtracion_max: 360
+      profundidad_lecho_min: 0.6  # metros
+      profundidad_lecho_max: 1.0
+      
+  # Desinfección
+  desinfeccion:
+    enabled: true
+    ras_references: ["A.7.9"]
+    parameters:
+      tiempo_contacto_min: 20  # minutos
+      tiempo_contacto_max: 30
+      dosis_cloro_min: 0.5  # mg/L
+      dosis_cloro_max: 3.0
+
+# ============================================================================
+# GENERACIÓN DE REPORTES
+# ============================================================================
+reporting:
+  # Configuración PDF
+  pdf:
+    enabled: true
+    engine: "reportlab"
+    page_size: "LETTER"  # A4 o LETTER
+    orientation: "portrait"
+    margins:
+      top: 2.5  # cm
+      bottom: 2.5
+      left: 3.0
+      right: 2.0
+    fonts:
+      title: "Helvetica-Bold"
+      heading: "Helvetica-Bold"
+      body: "Helvetica"
+      code: "Courier"
+    font_sizes:
+      title: 16
+      heading1: 14
+      heading2: 12
+      body: 10
+      caption: 9
+    include_sections:
+      - portada
+      - indice
+      - resumen_ejecutivo
+      - marco_normativo
+      - parametros_diseno
+      - calculos_detallados
+      - resultados
+      - validacion_normativa
+      - conclusiones
+      - anexos_cad
+      - referencias
+      
+  # Configuración Excel
+  excel:
+    enabled: true
+    engine: "openpyxl"  # o xlsxwriter
+    include_charts: true
+    include_formulas: true
+    sheets:
+      - parametros_entrada
+      - calculos_hidraulicos
+      - dimensionamiento
+      - validacion_ras
+      - validacion_calidad
+      - resumen_resultados
+      
+  # Configuración DXF
+  dxf:
+    enabled: true
+    engine: "ezdxf"
+    version: "R2018"  # Versión AutoCAD
+    units: "meters"
+    layers:
+      - general
+      - estructural
+      - hidraulico
+      - mecanico
+      - electrico
+      - instrumentacion
+    include_blocks: true
+    include_layout: true
+
+# ============================================================================
+# INTEGRACIÓN CON SENSORES IOT
+# ============================================================================
+sensors:
+  enabled: true
+  
+  # Configuración MQTT
+  mqtt:
+    enabled: true
+    broker: "localhost"
+    port: 1883
+    username: null
+    password: null
+    topics:
+      - ptap/sensores/turbidez
+      - ptap/sensores/ph
+      - ptap/sensores/cloro
+      - ptap/sensores/caudal
+    qos: 1
+    
+  # Archivos CSV/JSON
+  file_import:
+    enabled: true
+    formats: ["csv", "json", "xlsx"]
+    watch_directories:
+      - "data/sensors/import"
+    polling_interval: 60  # segundos
+    
+  # Puerto Serial
+  serial:
+    enabled: false
+    port: "COM3"
+    baudrate: 9600
+    timeout: 1
+
+# ============================================================================
+# TRAZABILIDAD Y LOGGING
+# ============================================================================
+traceability:
+  enabled: true
+  log_calculations: true
+  log_decisions: true
+  log_api_calls: true
+  log_validations: true
+  snapshot_frequency: "daily"
+  retention_days: 365
+  output_dir: "data/traceability"
+  
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"
+  output_dir: "logs"
+  rotation: "1 day"
+  retention: "30 days"
+  console_output: true
+
+# ============================================================================
+# INTERFAZ WEB
+# ============================================================================
+web_interface:
+  enabled: true
+  framework: "flask"  # o fastapi
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  
+  # Características
+  features:
+    parametros_entrada: true
+    visualizacion_resultados: true
+    conformidad_normativa: true
+    exportaciones: true
+    ayuda_contextual: true
+    sensor_dashboard: true
+    
+  # Seguridad
+  security:
+    cors_enabled: true
+    allowed_origins: ["http://localhost:3000"]
+    csrf_protection: true
+    rate_limiting: true
+    max_requests_per_minute: 60
+
+# ============================================================================
+# ALMACENAMIENTO Y CACHE
+# ============================================================================
+storage:
+  # Directorio base de datos
+  data_dir: "data"
+  
+  # Subdirectorios
+  directories:
+    projects: "data/projects"
+    snapshots: "data/snapshots"
+    cache: "data/cache"
+    exports: "data/exports"
+    traceability: "data/traceability"
+    
+  # Cache
+  cache:
+    enabled: true
+    backend: "diskcache"
+    max_size_mb: 1024
+    eviction_policy: "least-recently-used"
+
+# ============================================================================
+# TESTING Y DESARROLLO
+# ============================================================================
+testing:
+  enabled: true
+  coverage_threshold: 80  # porcentaje mínimo
+  run_integration_tests: true
+  mock_external_apis: true
+  test_data_dir: "tests/data"
+
+development:
+  hot_reload: true
+  debug_mode: false
+  profiling: false
+  verbose_errors: true
+
+# ============================================================================
+# MONITOREO DE VERSIONES NORMATIVAS
+# ============================================================================
+version_monitoring:
+  enabled: true
+  check_interval: 604800  # 7 días en segundos
+  sources:
+    - url: "https://minvivienda.gov.co"
+      type: "ras"
+    - url: "https://normas.cra.gov.co"
+      type: "ras"
+  alert_methods:
+    - log
+    - email
+  email_recipients: []
+
+# ============================================================================
+# CONFIGURACIÓN REGIONAL
+# ============================================================================
+regional:
+  country: "Colombia"
+  language: "es"
+  timezone: "America/Bogota"
+  currency: "COP"
+  units_system: "metric"
+  
+# ============================================================================
+# FIN DE CONFIGURACIÓN
+# ============================================================================

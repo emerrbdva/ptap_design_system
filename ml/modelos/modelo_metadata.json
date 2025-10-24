@@ -1,0 +1,28 @@
+{
+  "caracteristicas": [
+    "turbiedad_entrada",
+    "ph_entrada",
+    "temperatura",
+    "dosis_coagulante",
+    "gradiente_mezcla",
+    "tiempo_mezcla",
+    "gradiente_floculacion",
+    "tiempo_floculacion",
+    "carga_superficial",
+    "tasa_filtracion"
+  ],
+  "n_estimators": 150,
+  "max_depth": 20,
+  "feature_importances": {
+    "turbiedad_entrada": 0.05565859772492511,
+    "ph_entrada": 0.04506910543344018,
+    "temperatura": 0.018780729548309075,
+    "dosis_coagulante": 0.26675586035303667,
+    "gradiente_mezcla": 0.1003413100059659,
+    "tiempo_mezcla": 0.09990169114108811,
+    "gradiente_floculacion": 0.08380674200212629,
+    "tiempo_floculacion": 0.05277922180443347,
+    "carga_superficial": 0.11063887039020179,
+    "tasa_filtracion": 0.16626787159647347
+  }
+}

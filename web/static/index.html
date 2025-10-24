@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 PTAP Design System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .resultado h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .metric-value {
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #f5c6cb;
+            margin-top: 20px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #c3e6cb;
+            margin-top: 20px;
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌊 PTAP Design System</h1>
+            <p>Sistema Profesional de Diseño de Plantas de Tratamiento de Agua Potable</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                <span class="badge badge-success">100% Gratuito</span>
+                <span class="badge badge-info">Open Source</span>
+            </p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="cambiarTab('diseño')">🏗️ Diseño</button>
+            <button class="tab" onclick="cambiarTab('costos')">💰 Costos</button>
+            <button class="tab" onclick="cambiarTab('optimizacion')">⚡ Optimización</button>
+            <button class="tab" onclick="cambiarTab('prediccion')">🤖 Predicción ML</button>
+        </div>
+        
+        <!-- TAB DISEÑO -->
+        <div id="diseño" class="tab-content active">
+            <h2>Diseño de PTAP</h2>
+            <form id="formDiseño">
+                <div class="card">
+                    <h4>Datos del Proyecto</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Nombre del Proyecto</label>
+                            <input type="text" id="nombre_proyecto" required placeholder="PTAP San José">
+                        </div>
+                        <div class="form-group">
+                            <label>Población de Diseño</label>
+                            <input type="number" id="poblacion" required placeholder="15000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Parámetros de Agua Cruda</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Caudal (L/s)</label>
+                            <input type="number" id="caudal" step="0.1" required placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Turbiedad (NTU)</label>
+                            <input type="number" id="turbiedad" step="0.1" required placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label>pH</label>
+                            <input type="number" id="ph" step="0.1" min="4" max="10" required placeholder="7.2">
+                        </div>
+                        <div class="form-group">
+                            <label>Temperatura (°C)</label>
+                            <input type="number" id="temperatura" step="0.1" placeholder="22">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit">🚀 Diseñar PTAP</button>
+            </form>
+            
+            <div id="resultadoDiseño"></div>
+        </div>
+        
+        <!-- TAB COSTOS -->
+        <div id="costos" class="tab-content">
+            <h2>Estimación de Costos</h2>
+            <form id="formCostos">
+                <div class="card">
+                    <h4>Parámetros Operacionales</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Caudal (L/s)</label>
+                            <input type="number" id="caudal_costos" step="0.1" required placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Dosis Coagulante (mg/L)</label>
+                            <input type="number" id="dosis_coag" step="0.1" placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label>Dosis Cloro (mg/L)</label>
+                            <input type="number" id="dosis_cloro" step="0.1" placeholder="2">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit">💵 Calcular Costos</button>
+            </form>
+            
+            <div id="resultadoCostos"></div>
+        </div>
+        
+        <!-- TAB OPTIMIZACIÓN -->
+        <div id="optimizacion" class="tab-content">
+            <h2>Optimización Multi-objetivo</h2>
+            <form id="formOptimizacion">
+                <div class="card">
+                    <h4>Parámetros de Entrada</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Caudal (L/s)</label>
+                            <input type="number" id="caudal_opt" step="0.1" required placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Turbiedad (NTU)</label>
+                            <input type="number" id="turbiedad_opt" step="0.1" required placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label>pH</label>
+                            <input type="number" id="ph_opt" step="0.1" required placeholder="7.2">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Pesos de Objetivos (deben sumar 1.0)</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Peso Costo</label>
+                            <input type="number" id="peso_costo" step="0.1" min="0" max="1" value="0.4">
+                        </div>
+                        <div class="form-group">
+                            <label>Peso Eficiencia</label>
+                            <input type="number" id="peso_eficiencia" step="0.1" min="0" max="1" value="0.3">
+                        </div>
+                        <div class="form-group">
+                            <label>Peso Conformidad</label>
+                            <input type="number" id="peso_conformidad" step="0.1" min="0" max="1" value="0.3">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit">⚡ Optimizar</button>
+            </form>
+            
+            <div id="resultadoOptimizacion"></div>
+        </div>
+        
+        <!-- TAB PREDICCIÓN ML -->
+        <div id="prediccion" class="tab-content">
+            <h2>Predicción de Eficiencia (Machine Learning)</h2>
+            <form id="formPrediccion">
+                <div class="card">
+                    <h4>Parámetros Operacionales</h4>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label>Turbiedad Entrada (NTU)</label>
+                            <input type="number" id="turb_ml" step="0.1" required placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label>pH</label>
+                            <input type="number" id="ph_ml" step="0.1" required placeholder="7.2">
+                        </div>
+                        <div class="form-group">
+                            <label>Temperatura (°C)</label>
+                            <input type="number" id="temp_ml" step="0.1" required placeholder="22">
+                        </div>
+                        <div class="form-group">
+                            <label>Dosis Coagulante (mg/L)</label>
+                            <input type="number" id="dosis_coag_ml" step="0.1" required placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label>Gradiente Mezcla (s⁻¹)</label>
+                            <input type="number" id="grad_mezcla_ml" required placeholder="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Tiempo Mezcla (s)</label>
+                            <input type="number" id="tiempo_mezcla_ml" required placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label>Gradiente Floculación (s⁻¹)</label>
+                            <input type="number" id="grad_floc_ml" required placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Tiempo Floculación (s)</label>
+                            <input type="number" id="tiempo_floc_ml" required placeholder="1800">
+                        </div>
+                        <div class="form-group">
+                            <label>Carga Superficial (m³/m²/día)</label>
+                            <input type="number" id="carga_sup_ml" step="0.1" required placeholder="25">
+                        </div>
+                        <div class="form-group">
+                            <label>Tasa Filtración (m³/m²/día)</label>
+                            <input type="number" id="tasa_filt_ml" required placeholder="240">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit">🤖 Predecir Eficiencia</button>
+            </form>
+            
+            <div id="resultadoPrediccion"></div>
+        </div>
+        
+        <footer>
+            <p><strong>PTAP Design System v2.0.0</strong></p>
+            <p>Sistema 100% gratuito y open source • Sin costos de operación • Desarrollado con FastAPI, Python y Machine Learning</p>
+            <p style="margin-top: 10px;">
+                <a href="/docs" target="_blank" style="color: #667eea; text-decoration: none;">📖 Documentación API</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Cambiar entre tabs
+        function cambiarTab(tabId) {
+            // Desactivar todos los tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Activar tab seleccionado
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        
+        // Formatear números con separadores de miles
+        function formatearNumero(num) {
+            return new Intl.NumberFormat('es-CO').format(Math.round(num));
+        }
+        
+        // FORM DISEÑO
+        document.getElementById('formDiseño').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultadoDiv = document.getElementById('resultadoDiseño');
+            resultadoDiv.innerHTML = '<div class="loader"></div>';
+            
+            const datos = {
+                nombre_proyecto: document.getElementById('nombre_proyecto').value,
+                poblacion_diseño: parseInt(document.getElementById('poblacion').value),
+                caudal: parseFloat(document.getElementById('caudal').value),
+                turbiedad: parseFloat(document.getElementById('turbiedad').value),
+                ph: parseFloat(document.getElementById('ph').value),
+                temperatura: parseFloat(document.getElementById('temperatura').value) || 20
+            };
+            
+            try {
+                const response = await fetch('/api/diseñar', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                });
+                
+                const resultado = await response.json();
+                
+                if (response.ok) {
+                    let html = '<div class="success">✅ Diseño completado exitosamente</div>';
+                    
+                    html += '<div class="resultado"><h3>📊 Resultados del Diseño</h3>';
+                    html += `<div class="metric"><span class="metric-label">Proyecto:</span><span class="metric-value">${resultado.proyecto}</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Población:</span><span class="metric-value">${formatearNumero(resultado.poblacion)} hab</span></div>`;
+                    
+                    if (resultado.costos) {
+                        html += `<div class="metric"><span class="metric-label">CAPEX:</span><span class="metric-value">$${formatearNumero(resultado.costos.capex.total)} COP</span></div>`;
+                        html += `<div class="metric"><span class="metric-label">OPEX Anual:</span><span class="metric-value">$${formatearNumero(resultado.costos.opex.total_anual)} COP/año</span></div>`;
+                        html += `<div class="metric"><span class="metric-label">Costo/m³:</span><span class="metric-value">$${resultado.costos.opex.costo_m3.toFixed(2)} COP/m³</span></div>`;
+                    }
+                    
+                    if (resultado.optimizacion && resultado.optimizacion.exito) {
+                        html += `<div class="metric"><span class="metric-label">Eficiencia Optimizada:</span><span class="metric-value">${(resultado.optimizacion.metricas.eficiencia * 100).toFixed(1)}%</span></div>`;
+                        html += `<div class="metric"><span class="metric-label">Conformidad RAS:</span><span class="metric-value">${(resultado.optimizacion.metricas.conformidad_ras * 100).toFixed(1)}%</span></div>`;
+                    }
+                    
+                    html += '</div>';
+                    
+                    resultadoDiv.innerHTML = html;
+                } else {
+                    resultadoDiv.innerHTML = `<div class="error">❌ Error: ${resultado.detail}</div>`;
+                }
+            } catch (error) {
+                resultadoDiv.innerHTML = `<div class="error">❌ Error de conexión: ${error.message}</div>`;
+            }
+        });
+        
+        // FORM COSTOS
+        document.getElementById('formCostos').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultadoDiv = document.getElementById('resultadoCostos');
+            resultadoDiv.innerHTML = '<div class="loader"></div>';
+            
+            const datos = {
+                caudal: parseFloat(document.getElementById('caudal_costos').value),
+                dosis_coagulante: parseFloat(document.getElementById('dosis_coag').value) || 30,
+                dosis_cloro: parseFloat(document.getElementById('dosis_cloro').value) || 2
+            };
+            
+            try {
+                const response = await fetch('/api/estimar-costos', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                });
+                
+                const resultado = await response.json();
+                
+                if (response.ok) {
+                    let html = '<div class="success">✅ Costos calculados</div>';
+                    
+                    html += '<div class="resultado"><h3>💰 CAPEX (Inversión Inicial)</h3>';
+                    html += `<div class="metric"><span class="metric-label">Total CAPEX:</span><span class="metric-value">$${formatearNumero(resultado.capex.total)} COP</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Obra Civil:</span><span class="metric-value">$${formatearNumero(resultado.capex.obra_civil)} COP</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Equipos:</span><span class="metric-value">$${formatearNumero(resultado.capex.equipos)} COP</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Tuberías:</span><span class="metric-value">$${formatearNumero(resultado.capex.tuberias)} COP</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Costo/L/s:</span><span class="metric-value">$${formatearNumero(resultado.capex.costo_unitario_ls)} COP</span></div>`;
+                    html += '</div>';
+                    
+                    html += '<div class="resultado"><h3>💵 OPEX (Operación Anual)</h3>';
+                    html += `<div class="metric"><span class="metric-label">Total OPEX:</span><span class="metric-value">$${formatearNumero(resultado.opex.total_anual)} COP/año</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Químicos:</span><span class="metric-value">$${formatearNumero(resultado.opex.quimicos)} COP/año</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Energía:</span><span class="metric-value">$${formatearNumero(resultado.opex.energia)} COP/año</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Personal:</span><span class="metric-value">$${formatearNumero(resultado.opex.personal)} COP/año</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Costo/m³:</span><span class="metric-value">$${resultado.opex.costo_m3.toFixed(2)} COP/m³</span></div>`;
+                    html += '</div>';
+                    
+                    html += '<div class="resultado"><h3>📈 Análisis Financiero (25 años)</h3>';
+                    html += `<div class="metric"><span class="metric-label">VPN Total:</span><span class="metric-value">$${formatearNumero(resultado.financiero.vpn_25_años)} COP</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Costo Nivelado:</span><span class="metric-value">$${resultado.financiero.costo_nivelado_m3.toFixed(2)} COP/m³</span></div>`;
+                    html += '</div>';
+                    
+                    resultadoDiv.innerHTML = html;
+                } else {
+                    resultadoDiv.innerHTML = `<div class="error">❌ Error: ${resultado.detail}</div>`;
+                }
+            } catch (error) {
+                resultadoDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        });
+        
+        // FORM OPTIMIZACIÓN
+        document.getElementById('formOptimizacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultadoDiv = document.getElementById('resultadoOptimizacion');
+            resultadoDiv.innerHTML = '<div class="loader"></div><p style="text-align: center;">Optimizando... esto puede tomar 10-30 segundos</p>';
+            
+            const datos = {
+                caudal: parseFloat(document.getElementById('caudal_opt').value),
+                turbiedad: parseFloat(document.getElementById('turbiedad_opt').value),
+                ph: parseFloat(document.getElementById('ph_opt').value),
+                peso_costo: parseFloat(document.getElementById('peso_costo').value),
+                peso_eficiencia: parseFloat(document.getElementById('peso_eficiencia').value),
+                peso_conformidad: parseFloat(document.getElementById('peso_conformidad').value)
+            };
+            
+            try {
+                const response = await fetch('/api/optimizar', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                });
+                
+                const resultado = await response.json();
+                
+                if (response.ok && resultado.exito) {
+                    let html = '<div class="success">✅ Optimización completada en ' + resultado.iteraciones + ' iteraciones</div>';
+                    
+                    html += '<div class="resultado"><h3>⚡ Métricas Optimizadas</h3>';
+                    html += `<div class="metric"><span class="metric-label">Eficiencia:</span><span class="metric-value">${(resultado.metricas.eficiencia * 100).toFixed(1)}%</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Conformidad RAS:</span><span class="metric-value">${(resultado.metricas.conformidad_ras * 100).toFixed(1)}%</span></div>`;
+                    html += `<div class="metric"><span class="metric-label">Costo VPN:</span><span class="metric-value">$${formatearNumero(resultado.metricas.costo_vpn)} COP</span></div>`;
+                    html += '</div>';
+                    
+                    html += '<div class="resultado"><h3>🎯 Parámetros Óptimos</h3>';
+                    for (const [key, value] of Object.entries(resultado.parametros_optimos)) {
+                        html += `<div class="metric"><span class="metric-label">${key}:</span><span class="metric-value">${typeof value === 'number' ? value.toFixed(2) : value}</span></div>`;
+                    }
+                    html += '</div>';
+                    
+                    resultadoDiv.innerHTML = html;
+                } else {
+                    resultadoDiv.innerHTML = `<div class="error">❌ Error: ${resultado.detail || resultado.mensaje}</div>`;
+                }
+            } catch (error) {
+                resultadoDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        });
+        
+        // FORM PREDICCIÓN ML
+        document.getElementById('formPrediccion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultadoDiv = document.getElementById('resultadoPrediccion');
+            resultadoDiv.innerHTML = '<div class="loader"></div><p style="text-align: center;">Prediciendo con Machine Learning...</p>';
+            
+            const datos = {
+                turbiedad_entrada: parseFloat(document.getElementById('turb_ml').value),
+                ph_entrada: parseFloat(document.getElementById('ph_ml').value),
+                temperatura: parseFloat(document.getElementById('temp_ml').value),
+                dosis_coagulante: parseFloat(document.getElementById('dosis_coag_ml').value),
+                gradiente_mezcla: parseFloat(document.getElementById('grad_mezcla_ml').value),
+                tiempo_mezcla: parseFloat(document.getElementById('tiempo_mezcla_ml').value),
+                gradiente_floculacion: parseFloat(document.getElementById('grad_floc_ml').value),
+                tiempo_floculacion: parseFloat(document.getElementById('tiempo_floc_ml').value),
+                carga_superficial: parseFloat(document.getElementById('carga_sup_ml').value),
+                tasa_filtracion: parseFloat(document.getElementById('tasa_filt_ml').value)
+            };
+            
+            try {
+                const response = await fetch('/api/predecir-eficiencia', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                });
+                
+                const resultado = await response.json();
+                
+                if (response.ok) {
+                    let html = '<div class="success">✅ Predicción completada con Random Forest</div>';
+                    
+                    html += '<div class="resultado"><h3>🤖 Resultado de Predicción</h3>';
+                    html += `<div class="metric"><span class="metric-label">Eficiencia Predicha:</span><span class="metric-value" style="font-size: 1.5em;">${resultado.eficiencia_porcentaje.toFixed(1)}%</span></div>`;
+                    html += '</div>';
+                    
+                    html += '<div class="resultado"><h3>📊 Variables Más Importantes</h3>';
+                    for (const [key, value] of Object.entries(resultado.variables_mas_importantes)) {
+                        const porcentaje = (value * 100).toFixed(1);
+                        html += `<div class="metric"><span class="metric-label">${key}:</span><span class="metric-value">${porcentaje}%</span></div>`;
+                    }
+                    html += '</div>';
+                    
+                    if (resultado.modelo_info) {
+                        html += '<div class="resultado"><h3>ℹ️ Información del Modelo</h3>';
+                        html += `<div class="metric"><span class="metric-label">Árboles:</span><span class="metric-value">${resultado.modelo_info.n_estimators}</span></div>`;
+                        html += `<div class="metric"><span class="metric-label">Features:</span><span class="metric-value">${resultado.modelo_info.n_features}</span></div>`;
+                        html += '</div>';
+                    }
+                    
+                    resultadoDiv.innerHTML = html;
+                } else {
+                    resultadoDiv.innerHTML = `<div class="error">❌ Error: ${resultado.detail}</div>`;
+                }
+            } catch (error) {
+                resultadoDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
